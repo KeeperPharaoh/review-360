@@ -11,6 +11,14 @@ use MoonShine\Laravel\DependencyInjection\MoonShine;
 use MoonShine\Laravel\DependencyInjection\MoonShineConfigurator;
 use App\MoonShine\Resources\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRoleResource;
+use App\MoonShine\Resources\CompanyResource;
+use App\MoonShine\Resources\UserResource;
+use App\MoonShine\Resources\TeamResource;
+use App\MoonShine\Resources\PositionResource;
+use App\MoonShine\Resources\ReviewMethodResource;
+use App\MoonShine\Resources\QuestionResource;
+use App\MoonShine\Resources\EventResource;
+use App\MoonShine\Resources\AssignmentResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -27,6 +35,14 @@ class MoonShineServiceProvider extends ServiceProvider
             ->resources([
                 MoonShineUserResource::class,
                 MoonShineUserRoleResource::class,
+                CompanyResource::class,
+                UserResource::class,
+                TeamResource::class,
+                PositionResource::class,
+                ReviewMethodResource::class,
+                QuestionResource::class,
+                EventResource::class,
+                AssignmentResource::class,
             ])
             ->pages([
                 ...$config->getPages(),

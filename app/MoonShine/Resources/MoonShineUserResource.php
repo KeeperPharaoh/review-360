@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use App\Models\Company;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use MoonShine\Laravel\Enums\Action;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
-use MoonShine\Laravel\Models\MoonshineUser;
+use App\Models\MoonshineUser;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Laravel\Models\MoonshineUserRole;
 use MoonShine\MenuManager\Attributes\Group;
@@ -65,15 +66,19 @@ class MoonShineUserResource extends ModelResource
             BelongsTo::make(
                 __('moonshine::ui.resource.role'),
                 'moonshineUserRole',
-                formatted: static fn (MoonshineUserRole $model) => $model->name,
+                formatted: static fn(MoonshineUserRole $model) => $model->name,
                 resource: MoonShineUserRoleResource::class,
+            )->badge(Color::PURPLE),
+
+            BelongsTo::make(
+                'Компания',
+                'company',
+                formatted: static fn(Company $model) => $model->getName(),
+                resource: CompanyResource::class,
             )->badge(Color::PURPLE),
 
             Text::make(__('moonshine::ui.resource.name'), 'name'),
 
-            Image::make(__('moonshine::ui.resource.avatar'), 'avatar')->modifyRawValue(fn (
-                ?string $raw
-            ): string => $raw ?? ''),
 
             Date::make(__('moonshine::ui.resource.created_at'), 'created_at')
                 ->format("d.m.Y")
@@ -100,12 +105,21 @@ class MoonShineUserResource extends ModelResource
                         BelongsTo::make(
                             __('moonshine::ui.resource.role'),
                             'moonshineUserRole',
-                            formatted: static fn (MoonshineUserRole $model) => $model->name,
+                            formatted: static fn(MoonshineUserRole $model) => $model->name,
                             resource: MoonShineUserRoleResource::class,
                         )
-                            ->reactive()
                             ->creatable()
-                            ->valuesQuery(static fn (Builder $q) => $q->select(['id', 'name'])),
+                            ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
+
+
+                        BelongsTo::make(
+                            'Компания',
+                            'Company',
+                            formatted: static fn(Company $model) => $model->getName(),
+                            resource: CompanyResource::class,
+                        )
+                            ->reactive()
+                            ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
 
                         Flex::make([
                             Text::make(__('moonshine::ui.resource.name'), 'name')
@@ -115,10 +129,6 @@ class MoonShineUserResource extends ModelResource
                                 ->required(),
                         ]),
 
-                        Image::make(__('moonshine::ui.resource.avatar'), 'avatar')
-                            ->disk(moonshineConfig()->getDisk())
-                            ->dir('moonshine_users')
-                            ->allowedExtensions(['jpg', 'png', 'jpeg', 'gif']),
 
                         Date::make(__('moonshine::ui.resource.created_at'), 'created_at')
                             ->format("d.m.Y")
@@ -149,6 +159,7 @@ class MoonShineUserResource extends ModelResource
         return [
             'name' => 'required',
             'moonshine_user_role_id' => 'required',
+            'company_id' => 'required',
             'email' => [
                 'sometimes',
                 'bail',
@@ -167,6 +178,7 @@ class MoonShineUserResource extends ModelResource
         return [
             'id',
             'name',
+            'email',
         ];
     }
 
@@ -176,11 +188,16 @@ class MoonShineUserResource extends ModelResource
             BelongsTo::make(
                 __('moonshine::ui.resource.role'),
                 'moonshineUserRole',
-                formatted: static fn (MoonshineUserRole $model) => $model->name,
+                formatted: static fn(MoonshineUserRole $model) => $model->name,
                 resource: MoonShineUserRoleResource::class,
-            )->valuesQuery(static fn (Builder $q) => $q->select(['id', 'name'])),
+            )->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
 
-            Email::make('E-mail', 'email'),
+            BelongsTo::make(
+                'Компания',
+                'company',
+                formatted: static fn(Company $model) => $model->getName(),
+                resource: CompanyResource::class,
+            )->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
         ];
     }
 }
