@@ -142,11 +142,6 @@ class UserDetailPage extends DetailPage
                 ],
                 values: ['text' => 'Текст', 'user_id' => $user->id]
             ),
-
-            Content::make([
-                ActionButton::make('Загрузить документ', ''),
-            ]),
-
         ];
     }
 
