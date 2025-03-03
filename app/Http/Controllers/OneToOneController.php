@@ -53,16 +53,16 @@ class OneToOneController extends Controller
         }
 
         $events = Event::query()
-        ->whereNotNull('report')
-        ->get();
-        
+            ->whereNotNull('report')
+            ->get();
+        $result = "";
         /** @var Event $event */
         foreach ($events as $event) {
             $result .=  $event->report . PHP_EOL;
         }
         $response = $this->openAiService->test(
             'На основе последних отчетов можешь стравнить диминку и тендации.</br>'
-            . $this->cut($result, 500));
+            . $this->cut($result, 1000));
 
         return response()->json($response);
     }
