@@ -93,6 +93,10 @@ class UserDetailPage extends DetailPage
 
         return [
             Html::make([
+                Title::make( $user->first_name . ' ' . $user->last_name . ':'),
+                Title::make( 'Отдел: ' . ' ' . $user->team->name),
+                Title::make( 'Должность: ' . ' ' . $user->position->name),
+
                 Grid::make([
                     Content::make([
                         ActionButton::make('Посмотреть отзывы',

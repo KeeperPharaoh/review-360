@@ -28,9 +28,9 @@ class Test extends Command
     {
         $notIn = Answer::query()
             ->whereNotNull('assignment_id')
-            ->select('id')
+            ->select('assignment_id')
             ->get()
-            ->pluck('id')
+            ->pluck('assignment_id')
             ->toArray();
 
         $assignments = Assignment::query()
