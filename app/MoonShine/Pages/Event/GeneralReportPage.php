@@ -97,8 +97,8 @@ class GeneralReportPage extends Page
                 'Данная функция еще недоступна',
             )->name('my-modal'),
 
-            ActionButton::make('Сравнить с другими')
-                ->toggleModal('my-modal'),
+//            ActionButton::make('Сравнить с другими')
+//                ->toggleModal('my-modal'),
 
             Grid::make([
                 DonutChartMetric::make('Оценка компании')
