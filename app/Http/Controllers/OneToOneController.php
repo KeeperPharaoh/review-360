@@ -52,7 +52,10 @@ class OneToOneController extends Controller
             return response()->json($response);
         }
 
-        $events = Event::all();
+        $events = Event::query()
+        ->whereNotNull('report')
+        ->get();
+        
         /** @var Event $event */
         foreach ($events as $event) {
             $result .=  $event->report . PHP_EOL;
