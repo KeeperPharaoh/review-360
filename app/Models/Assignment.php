@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Assignment extends Model
 {
+    protected $fillable = [
+        'from_user_id',
+        'review_methods',
+        'to_user_id',
+    ];
+
     public function reviewMethod(): BelongsTo
     {
         return $this->belongsTo(ReviewMethod::class);

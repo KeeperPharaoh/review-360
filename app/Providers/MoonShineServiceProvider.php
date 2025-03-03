@@ -24,6 +24,8 @@ use App\MoonShine\Pages\Event\GptPage;
 use App\MoonShine\Pages\Event\ReportPage;
 use App\MoonShine\Resources\AnswerResource;
 use App\MoonShine\Pages\Event\GeneralReportPage;
+use App\MoonShine\Pages\Event\AnswerPage;
+use App\MoonShine\Pages\Event\UserMetaPage;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -54,6 +56,8 @@ class MoonShineServiceProvider extends ServiceProvider
                 ...$config->getPages(),
                 ReportPage::class,
                 GeneralReportPage::class,
+                AnswerPage::class,
+                UserMetaPage::class,
             ])
         ;
     }

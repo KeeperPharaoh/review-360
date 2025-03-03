@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use App\MoonShine\Pages\Event\AnswerPage;
+use App\MoonShine\Pages\Event\ReportPage;
+use App\MoonShine\Pages\Event\UserMetaPage;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\MoonShine\Pages\User\UserIndexPage;
@@ -31,6 +34,9 @@ class UserResource extends ModelResource
             UserIndexPage::class,
             UserFormPage::class,
             UserDetailPage::class,
+            ReportPage::class,
+            AnswerPage::class,
+            UserMetaPage::class,
         ];
     }
 

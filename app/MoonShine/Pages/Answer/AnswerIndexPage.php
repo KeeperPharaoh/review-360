@@ -27,12 +27,8 @@ class AnswerIndexPage extends IndexPage
     {
         return [
             ID::make(),
-            BelongsTo::make(
-                 'Кого оценили',
-                'User',
-                formatted: static fn(User $model) => $model->first_name . ' ' . $model->last_name,
-                resource: UserResource::class,
-            ),
+            Text::make('Кого оценили', 'target_name'),
+
             BelongsTo::make(
                 'Вопрос',
                 'Question',

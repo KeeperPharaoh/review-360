@@ -9,13 +9,27 @@ use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Question;
 use App\Models\User;
+use App\MoonShine\Pages\Event\AnswerPage;
+use App\MoonShine\Pages\Event\ReportPage;
+use App\MoonShine\Pages\Event\UserMetaPage;
+use http\Message\Body;
 use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Support\Enums\FormMethod;
 use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\ActionGroup;
+use MoonShine\UI\Components\FormBuilder;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Components\Layout\Content;
+use MoonShine\UI\Components\Layout\Div;
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\UI\Components\Layout\Head;
+use MoonShine\UI\Components\Layout\Html;
 use MoonShine\UI\Components\Modal;
+use MoonShine\UI\Components\Title;
+use MoonShine\UI\Fields\Hidden;
+use MoonShine\UI\Fields\Textarea;
 use Throwable;
 use MoonShine\Apexcharts\Components\LineChartMetric;
 
@@ -72,26 +86,59 @@ class UserDetailPage extends DetailPage
                 ->get();
             $total = 0;
             foreach ($answers as $answer) {
-                $total += $answer->answer;
+                $total += (int) $answer->answer;
             }
-            $lineChartMetricData[(new \DateTime($event->end_at))->format('Y-m-d')] =  $answers->count() ? $total / $answers->count() : 0;
+            $lineChartMetricData[(new \DateTime($event->end_at))->format('Y-m-d')] = number_format($answers->count() ? $total / $answers->count() : 0, 2);
         }
 
         return [
-            LineChartMetric::make('Ср. Оценка')
-                ->line([
-                    'Count' => $lineChartMetricData
-                ])->columnSpan(5),
+            Html::make([
+                Grid::make([
+                    Content::make([
+                        ActionButton::make('Посмотреть отзывы',
+                            $this->getResource()->getPageUrl(AnswerPage::class) . '?user_id=' . $user->id),
+                    ]),
+                    Title::make('<div> </div>'),
+                    Content::make([
+                        ActionButton::make('Посмотреть отчеты', $this->getResource()->getPageUrl(ReportPage::class) . '?user_id=' . $user->id),
+                    ]),
 
-            Modal::make(
-                'Заголовок',
-                'Содержимое',
-            )->name('my-modal'),
+                    Title::make('<div> </div>'),
+                    Content::make([
+                        ActionButton::make('Посмотреть заметки', $this->getResource()->getPageUrl(UserMetaPage::class) . '?user_id=' . $user->id),
+                    ]),
 
-            ActionButton::make('Сгенерировать вопросы для one-to-one')->toggleModal('my-modal'),
-            ActionButton::make('Добавить заметку')->toggleModal('my-modal'),
-            ActionButton::make('Обновить отчет об сотрудники')->toggleModal('my-modal'),
-            ActionButton::make('Показать динамику ответов')->toggleModal('my-modal'),
+                    Title::make('<div> </div>'),
+                    Content::make([
+                        Modal::make(
+                            'Вопросы для One-to-One',
+                            '',
+                            ActionButton::make('Сгенерировать вопросы для one-to-one', '#'),
+                            asyncUrl: '/api/one-to-one?user_id=' . $user->id
+                        ),]),
+                ], 4),
+
+                Title::make('<br>'),
+
+                Head::make([
+                    LineChartMetric::make('Ср. Оценка')
+                        ->line([
+                            'Count' => $lineChartMetricData
+                        ])->columnSpan(5),
+                ]),
+            ]),
+
+            FormBuilder::make(
+                action: '/api/user-meta',
+                method: FormMethod::POST,
+                fields: [
+                    Hidden::make('_method')->setValue('post'),
+                    Hidden::make('user_id')->setValue($user->id),
+                    Textarea::make('Добавить заметку', 'text')
+                ],
+                values: ['text' => 'Текст', 'user_id' => $user->id]
+            ),
+
         ];
     }
 

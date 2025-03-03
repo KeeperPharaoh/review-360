@@ -7,6 +7,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Answer extends Model
 {
+    protected $fillable = [
+        'user_id',
+        'event_id',
+        'question_id',
+        'assignment_id',
+        'answer',
+        'log',
+        'target_name'
+    ];
+
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
+    }
+
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
