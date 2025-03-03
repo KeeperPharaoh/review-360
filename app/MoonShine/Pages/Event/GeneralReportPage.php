@@ -74,6 +74,7 @@ class GeneralReportPage extends Page
         $answers = Answer::query()
             ->where('question_id', '=', $question->id)
             ->where('event_id', '=', $event->id)
+            ->limit(41)
             ->get();
 
         $promotersEmployee = 0;
