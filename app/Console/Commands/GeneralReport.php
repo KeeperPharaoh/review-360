@@ -12,6 +12,6 @@ class GeneralReport extends Command
 
     public function handle()
     {
-        //
+
     }
 }
