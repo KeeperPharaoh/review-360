@@ -59,7 +59,7 @@ class OneToOneController extends Controller
         }
         $response = $this->openAiService->test(
             'На основе последних отчетов можешь стравнить диминку и тендации.</br>'
-            . $result);
+            . $this->cut($result, 500));
 
         return response()->json($response);
     }
