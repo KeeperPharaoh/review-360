@@ -97,8 +97,12 @@ class GeneralReportPage extends Page
                 'Данная функция еще недоступна',
             )->name('my-modal'),
 
-//            ActionButton::make('Сравнить с другими')
-//                ->toggleModal('my-modal'),
+            Modal::make(
+                'Сравнить с другими',
+                '',
+                ActionButton::make('Сгенерировать вопросы для one-to-one', '#'),
+                asyncUrl: '/api/one-to-one?event_id=' . $eventId
+            ),
 
             Grid::make([
                 DonutChartMetric::make('Оценка компании')
