@@ -33,7 +33,7 @@ class OneToOneController extends Controller
         /** @var Report $report */
         foreach ($reports as $report) {
             $result .= "Отчет " . $report->event->name . PHP_EOL;
-            $result .= $report->text . PHP_EOL;
+            $result .= $this->cut($report->text, 500) . PHP_EOL;
         }
 
         /** @var UserMeta $meta */
@@ -60,5 +60,18 @@ class OneToOneController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    public function cut($text, $length)
+    {
+        $cut = null;
+
+        if (mb_strlen($text, 'utf-8') > $length) {
+            $cut = mb_substr($text, 0, $length, 'utf-8') . '...';
+        } else {
+            $cut = $text;
+        }
+
+        return $cut;
     }
 }
