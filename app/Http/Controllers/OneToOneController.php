@@ -61,8 +61,8 @@ class OneToOneController extends Controller
             $result .=  $event->report . PHP_EOL;
         }
         $response = $this->openAiService->test(
-            'На основе последних отчетов можешь стравнить диминку и тендации.</br>'
-            . $this->cut($result, 1000));
+            'На основе последних отчетов о компании можешь стравнить диминку и тендации . Дать в красивом формате, Просто список вопросов и между вопросами тег </br>'
+            . $this->cut($result, 1300));
 
         return response()->json($response);
     }
