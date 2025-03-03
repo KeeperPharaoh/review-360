@@ -98,9 +98,9 @@ class GeneralReportPage extends Page
             )->name('my-modal'),
 
             Modal::make(
-                'Сравнить с другими',
+                'Сравнение',
                 '',
-                ActionButton::make('Сгенерировать вопросы для one-to-one', '#'),
+                ActionButton::make('Сравнить с другими', '#'),
                 asyncUrl: '/api/one-to-one?event_id=' . $eventId
             ),
 
