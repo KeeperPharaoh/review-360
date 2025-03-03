@@ -32,7 +32,7 @@ class OpenAiService
             ],
         ]);
 
-        $result = $result->choices[0]->message->content;
+        return $result->choices[0]->message->content;
         if (preg_match('/\{.*?\}/s', $result, $matches)) {
             $result = $matches[0];
         }
@@ -40,5 +40,17 @@ class OpenAiService
         $data = json_decode($result, true);
 
         return $data;
+    }
+
+    public function generateOneToOneReport(string $text)
+    {
+        $result = $this->getClient()->chat()->create([
+            'model' => 'gpt-4o-2024-11-20',
+            'messages' => [
+                ['role' => 'user', 'content' => $text],
+            ],
+        ]);
+
+        return $result->choices[0]->message->content;
     }
 }

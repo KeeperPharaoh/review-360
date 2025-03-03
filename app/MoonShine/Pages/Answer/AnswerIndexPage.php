@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\Answer;
 
 use App\Models\Question;
-use App\Models\User;
 use App\MoonShine\Resources\QuestionResource;
-use App\MoonShine\Resources\UserResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;

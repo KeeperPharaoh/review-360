@@ -71,11 +71,15 @@ class EventDetailPage extends DetailPage
         $progress = Assignment::query()
                 ->where('review_method_id', '=', $event->review_method_id)
                 ->count() * 2;
-        $progress += (User::query()->where('company_id', '=', $event->company_id)->count() * 2);
+
+        $progress += (User::query()->count() * 2);
+
         $value = Answer::query()
             ->where('event_id', '=', $event->id)
             ->count();
-
+        if ($value >= $progress) {
+            $progress = $value;
+        }
         return [
             ValueMetric::make('Завершен')
                 ->value($value)

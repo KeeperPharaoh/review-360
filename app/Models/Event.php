@@ -10,6 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Event extends Model
 {
+    protected $fillable = [
+        'company_id',
+        'review_method_id',
+        'name',
+        'start_at',
+        'end_at',
+        'report',
+        'team_report',
+    ];
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

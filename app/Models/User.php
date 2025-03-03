@@ -13,6 +13,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'general_report',
     ];
 
     public function team(): BelongsTo
