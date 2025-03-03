@@ -102,9 +102,7 @@ class QuestionResource extends ModelResource
      */
     protected function detailFields(): iterable
     {
-        return [
-            ID::make(),
-        ];
+        return $this->indexFields();
     }
 
     /**

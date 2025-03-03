@@ -2,45 +2,44 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages\Event;
+namespace App\MoonShine\Pages\Answer;
 
-use App\Models\ReviewMethod;
-use App\Models\Team;
-use App\MoonShine\Resources\ReviewMethodResource;
-use App\MoonShine\Resources\TeamResource;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Question;
+use App\Models\User;
+use App\MoonShine\Resources\QuestionResource;
+use App\MoonShine\Resources\UserResource;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
-use MoonShine\UI\Fields\Date;
 use Throwable;
 
-
-class EventIndexPage extends IndexPage
+class AnswerIndexPage extends IndexPage
 {
+    protected bool $isAsync = false;
+
     /**
      * @return list<ComponentContract|FieldContract>
      */
     protected function fields(): iterable
     {
         return [
-            ID::make()->sortable(),
-
+            ID::make(),
             BelongsTo::make(
-                'Методология',
-                'ReviewMethod',
-                formatted: static fn(ReviewMethod $model) => $model->getName(),
-                resource: ReviewMethodResource::class,
-            )
-                ->creatable()
-                ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
-            Text::make('Название', 'name'),
-            Date::make('Дата начала', 'start_at')->format('Y-m-d'),
-            Date::make('Дата конца', 'end_at')->format('Y-m-d'),
-
+                 'Кого оценили',
+                'User',
+                formatted: static fn(User $model) => $model->first_name . ' ' . $model->last_name,
+                resource: UserResource::class,
+            ),
+            BelongsTo::make(
+                'Вопрос',
+                'Question',
+                formatted: static fn(Question $model) => $model->question,
+                resource: QuestionResource::class,
+            ),
+            Text::make('Ответ', 'answer'),
         ];
     }
 

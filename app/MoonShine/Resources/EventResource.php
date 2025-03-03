@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use App\MoonShine\Pages\Event\GeneralReportPage;
+use App\MoonShine\Pages\Event\ReportPage;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Event;
 use App\MoonShine\Pages\Event\EventIndexPage;
@@ -20,8 +22,8 @@ class EventResource extends ModelResource
 {
     protected string $model = Event::class;
 
-    protected string $title = 'Events';
-    
+    protected string $title = 'Мероприятия';
+
     /**
      * @return list<Page>
      */
@@ -31,6 +33,8 @@ class EventResource extends ModelResource
             EventIndexPage::class,
             EventFormPage::class,
             EventDetailPage::class,
+            GeneralReportPage::class,
+            ReportPage::class,
         ];
     }
 

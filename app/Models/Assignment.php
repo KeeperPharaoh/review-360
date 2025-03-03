@@ -11,4 +11,14 @@ class Assignment extends Model
     {
         return $this->belongsTo(ReviewMethod::class);
     }
+
+    public function fromUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function toUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

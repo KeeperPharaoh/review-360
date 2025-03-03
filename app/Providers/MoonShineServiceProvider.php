@@ -19,6 +19,11 @@ use App\MoonShine\Resources\ReviewMethodResource;
 use App\MoonShine\Resources\QuestionResource;
 use App\MoonShine\Resources\EventResource;
 use App\MoonShine\Resources\AssignmentResource;
+use App\MoonShine\Pages\Event;
+use App\MoonShine\Pages\Event\GptPage;
+use App\MoonShine\Pages\Event\ReportPage;
+use App\MoonShine\Resources\AnswerResource;
+use App\MoonShine\Pages\Event\GeneralReportPage;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -43,9 +48,12 @@ class MoonShineServiceProvider extends ServiceProvider
                 QuestionResource::class,
                 EventResource::class,
                 AssignmentResource::class,
+                AnswerResource::class,
             ])
             ->pages([
                 ...$config->getPages(),
+                ReportPage::class,
+                GeneralReportPage::class,
             ])
         ;
     }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages;
 
+use App\Models\MoonshineUser;
+use Illuminate\Support\Facades\Auth;
 use MoonShine\Laravel\Pages\Page;
 use MoonShine\Contracts\UI\ComponentContract;
 #[\MoonShine\MenuManager\Attributes\SkipMenu]
@@ -22,7 +24,7 @@ class Dashboard extends Page
 
     public function getTitle(): string
     {
-        return $this->title ?: 'Dashboard';
+        return 'О компании';
     }
 
     /**

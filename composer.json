@@ -13,7 +13,9 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "moonshine/moonshine": "^3.7"
+        "moonshine/apexcharts": "^1.0",
+        "moonshine/moonshine": "^3.7",
+        "openai-php/client": "^0.10.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

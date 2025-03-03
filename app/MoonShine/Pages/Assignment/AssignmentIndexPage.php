@@ -2,24 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages\Event;
+namespace App\MoonShine\Pages\Assignment;
 
 use App\Models\ReviewMethod;
-use App\Models\Team;
+use App\Models\User;
 use App\MoonShine\Resources\ReviewMethodResource;
-use App\MoonShine\Resources\TeamResource;
+use App\MoonShine\Resources\UserResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Fields\Text;
-use MoonShine\UI\Fields\Date;
 use Throwable;
 
 
-class EventIndexPage extends IndexPage
+class AssignmentIndexPage extends IndexPage
 {
     /**
      * @return list<ComponentContract|FieldContract>
@@ -27,20 +24,29 @@ class EventIndexPage extends IndexPage
     protected function fields(): iterable
     {
         return [
-            ID::make()->sortable(),
-
             BelongsTo::make(
                 'Методология',
                 'ReviewMethod',
                 formatted: static fn(ReviewMethod $model) => $model->getName(),
                 resource: ReviewMethodResource::class,
             )
-                ->creatable()
                 ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
-            Text::make('Название', 'name'),
-            Date::make('Дата начала', 'start_at')->format('Y-m-d'),
-            Date::make('Дата конца', 'end_at')->format('Y-m-d'),
 
+            BelongsTo::make(
+                'Кто оценивает',
+                'FromUser',
+                formatted: static fn(User $model) => $model->first_name . ' '  . $model->last_name,
+                resource: UserResource::class,
+            )
+                ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
+
+            BelongsTo::make(
+                'Кого',
+                'ToUser',
+                formatted: static fn(User $model) => $model->first_name . ' '  . $model->last_name,
+                resource: UserResource::class,
+            )
+                ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
         ];
     }
 

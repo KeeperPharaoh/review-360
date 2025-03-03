@@ -45,6 +45,7 @@ use App\MoonShine\Resources\ReviewMethodResource;
 use App\MoonShine\Resources\QuestionResource;
 use App\MoonShine\Resources\EventResource;
 use App\MoonShine\Resources\AssignmentResource;
+use App\MoonShine\Resources\AnswerResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -67,21 +68,23 @@ final class MoonShineLayout extends AppLayout
                     static fn() => __('moonshine::ui.resource.admins_title'),
                     MoonShineUserResource::class
                 ),
-                MenuItem::make('Assignments', AssignmentResource::class),
         ];
         } else {
             return [
-                MenuItem::make('Сотрудники', UserResource::class),
-                MenuItem::make('Мероприятия', EventResource::class),
+                MenuItem::make('Сотрудники', UserResource::class, 'user-group'),
+                MenuItem::make('Мероприятия', EventResource::class, 'calendar'),
 
-                MenuGroup::make('Настройка отделов', [
-                    MenuItem::make('Отделы', TeamResource::class),
-                    MenuItem::make('Должности', PositionResource::class),
-                ]),
-                MenuGroup::make('Настройка оценивания', [
-                    MenuItem::make('Методологии', ReviewMethodResource::class),
-                    MenuItem::make('Вопросы', QuestionResource::class),
-                ]),
+                MenuGroup::make('Настр. Отделов', [
+                    MenuItem::make('Отделы', TeamResource::class, 'building-office-2'),
+                    MenuItem::make('Должности', PositionResource::class, 'users'),
+                ], 'squares-2x2'),
+                MenuGroup::make('Настр. Оценивания', [
+                    MenuItem::make('Методологии', ReviewMethodResource::class, 'queue-list'),
+                    MenuItem::make('Вопросы', QuestionResource::class, 'question-mark-circle'),
+                    MenuItem::make('Матрица оценок', AssignmentResource::class, 'cube-transparent'),
+                ], 'squares-2x2'),
+//                MenuItem::make('Answers', AnswerResource::class),
+
             ];
         }
     }

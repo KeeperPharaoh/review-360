@@ -6,51 +6,30 @@ namespace App\MoonShine\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Assignment;
+use App\MoonShine\Pages\Assignment\AssignmentIndexPage;
+use App\MoonShine\Pages\Assignment\AssignmentFormPage;
+use App\MoonShine\Pages\Assignment\AssignmentDetailPage;
 
 use MoonShine\Laravel\Resources\ModelResource;
-use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Fields\ID;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Laravel\Pages\Page;
 
 /**
- * @extends ModelResource<Assignment>
+ * @extends ModelResource<Assignment, AssignmentIndexPage, AssignmentFormPage, AssignmentDetailPage>
  */
 class AssignmentResource extends ModelResource
 {
     protected string $model = Assignment::class;
 
-    protected string $title = 'Assignments';
-    
-    /**
-     * @return list<FieldContract>
-     */
-    protected function indexFields(): iterable
-    {
-        return [
-            ID::make()->sortable(),
-        ];
-    }
+    protected string $title = 'Матрица оценок';
 
     /**
-     * @return list<ComponentContract|FieldContract>
+     * @return list<Page>
      */
-    protected function formFields(): iterable
+    protected function pages(): array
     {
         return [
-            Box::make([
-                ID::make(),
-            ])
-        ];
-    }
-
-    /**
-     * @return list<FieldContract>
-     */
-    protected function detailFields(): iterable
-    {
-        return [
-            ID::make(),
+            AssignmentIndexPage::class,
+            AssignmentFormPage::class,
         ];
     }
 
