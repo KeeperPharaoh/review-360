@@ -40,9 +40,7 @@ class Dashboard extends Page
      */
     protected function components(): iterable
     {
-        $events = Event::query()
-            ->where('end_at', '<=', now())
-            ->get();
+        $events = Event::all();
         $lineChartMetricData = [];
 
         foreach ($events as $event) {
