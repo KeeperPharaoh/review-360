@@ -44,15 +44,9 @@ class Dashboard extends Page
         $lineChartMetricData = [];
 
         foreach ($events as $event) {
-            $questions = Question::query()
-                ->where('target', '=', 'company')
-                ->whereIn('answer_type', ['number_10'])
-                ->get()
-                ->pluck('id');
-
             $answers = Answer::query()
                 ->where('event_id', '=', $event->id)
-                ->whereIn('question_id', $questions)
+                ->where('question_id', 3)
                 ->select(['answer'])
                 ->get();
 
