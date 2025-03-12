@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\Event;
 
+use App\Models\Answer;
+use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Report;
 use App\Models\UserMeta;
@@ -46,8 +48,26 @@ class ReportPage extends Page
 
             /** @var Report $report */
             foreach ($reports as $report) {
+                $assignments = Assignment::query()
+                    ->where('to_user_id', '=', $report->user_id)
+                    ->select(['id'])
+                    ->get()
+                    ->pluck('id');
+
+                $answers = Answer::query()
+                    ->where('event_id', '=', $event->id)
+                    ->where('question_id', 1)
+                    ->whereIn('assignment_id', $assignments)
+                    ->select(['answer'])
+                    ->get();
+                $total = 0;
+                foreach ($answers as $answer) {
+                    $total += (int) $answer->answer;
+                }
+
                 $result[] = [
-                    'fio' => $report->user->first_name . ' ' . $report->user->first_name,
+                    'fio' => $report->user->first_name . ' ' . $report->user->last_name,
+                    'avg' => number_format($answers->where('answer', '!=', 'Не взаимодействуем')->count() ? $total / $answers->where('answer', '!=', 'Не взаимодействуем')->count() : 0, 2),
                     'report' => $report->text,
                 ];
             }
@@ -57,6 +77,7 @@ class ReportPage extends Page
                     ->items($result)
                     ->fields([
                         Text::make('ФИО', 'fio'),
+                        Text::make('Ср. оценка', 'avg'),
                         Text::make('Отчет', 'report'),
                     ])
             ];
