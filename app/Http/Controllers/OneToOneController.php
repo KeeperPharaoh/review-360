@@ -96,19 +96,28 @@ class OneToOneController extends Controller
     public function answer(Request $request)
     {
         $data = $request->all();
-        $assigment = Assignment::query()
-            ->find($data['assignment_id']);
-
+        //                    'from_user_id' => $assignment->from_user_id,
+        //                    'to_user_id' => $assignment->to_user_id,
+        //                    'question_id' => $questionId,
+        //                    'answer' => $rating,
 
         //                'answer' => $rating,
         //                'assignment_id' => $assignmentId,
         //                'question_id' => $questionId,
+        $assignment_id =  $data['assignment_id'];
+        if ($data['to_user_id'] == 1 ) {
+            $assignment_id = null;
+            $target_name = 'Компания';
+        } else {
+            $assigment =  Assignment::query()->find($data['assignment_id']);
 
+            $target_name = $assigment->toUser->first_name . ' ' . $assigment->toUser->last_name;
+        }
         Answer::query()->create([
-            'user_id' => $assigment->from_user_id,
+            'user_id' => $data['from_user_id'],
             'event_id' => 1,
             'question_id' => $data['question_id'],
-            'assignment_id' => $data['assignment_id'],
+            'assignment_id' => $assignment_id,
             'answer' => $data['answer'],
             'target_name' => $assigment->toUser->first_name . ' ' . $assigment->toUser->last_name,
         ]);
