@@ -54,6 +54,7 @@ class UserIndexPage extends IndexPage
             Text::make(__('moonshine::ui.resource.name'), 'first_name'),
             Text::make('Фамилия', 'last_name'),
             Text::make('Номер телефона', 'phone_number'),
+            Text::make('Telegram', 'telegram_username'),
         ];
     }
 
@@ -88,5 +89,10 @@ class UserIndexPage extends IndexPage
         return [
             ...parent::bottomLayer()
         ];
+    }
+
+    protected function search(): array
+    {
+        return ['id', 'first_name', 'last_name'];
     }
 }

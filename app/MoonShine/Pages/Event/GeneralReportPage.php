@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\Event;
 
 use App\Models\Answer;
+use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Question;
+use App\Models\User;
 use MoonShine\Laravel\Pages\Page;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Apexcharts\Components\DonutChartMetric;
@@ -48,7 +50,6 @@ class GeneralReportPage extends Page
             ->where('target', '=', 'company')
             ->where('answer_type', '=', 'number_10')
             ->first();
-
         $answers = Answer::query()
             ->where('question_id', '=', $question->id)
             ->where('event_id', '=', $event->id)
@@ -71,20 +72,37 @@ class GeneralReportPage extends Page
             ->where('target', '=', 'employee')
             ->where('answer_type', '=', 'number_5')
             ->first();
-        $answers = Answer::query()
-            ->where('question_id', '=', $question->id)
-            ->where('event_id', '=', $event->id)
-            ->limit(41)
-            ->get();
 
         $promotersEmployee = 0;
         $passivesEmployee = 0;
         $detractorsEmployee = 0;
+        $users = User::all();
 
-        foreach ($answers as $answer) {
-            if ($answer->answer >= 5) {
+        foreach ($users as $user) {
+            $assignment = Assignment::query()
+                ->where('to_user_id', '=', $user->id)
+                ->select(['id'])
+                ->get()
+                ->pluck('id')
+                ->toArray();
+
+            $answers =  Answer::query()
+                ->where('question_id', '=', $question->id)
+                ->whereIn('assignment_id', $assignment)
+                ->where('answer', '!=', 'Не взаимодействуем')
+                ->get();
+            $total = 0;
+            foreach ($answers as $answer) {
+                try {
+                    $total += $answer->answer;
+                } catch (\Throwable $e) {
+                }
+            }
+
+            $mid = $total / count($assignment);
+            if ($mid >= 4) {
                 $promotersEmployee++;
-            } elseif ($answer->answer >= 4) {
+            } elseif ($mid >= 3) {
                 $passivesEmployee++;
             } else {
                 $detractorsEmployee++;

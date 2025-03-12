@@ -9,20 +9,20 @@ use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\ReviewMethod;
 use App\Models\User;
-use App\MoonShine\Pages\Answer\AnswerDetailPage;
 use App\MoonShine\Resources\ReviewMethodResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use MoonShine\Apexcharts\Components\DonutChartMetric;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Layout\Content;
 use MoonShine\UI\Components\Metrics\Wrapped\ValueMetric;
+use MoonShine\UI\Components\Title;
 use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 class EventDetailPage extends DetailPage
 {
@@ -68,22 +68,65 @@ class EventDetailPage extends DetailPage
     {
         /** @var Event $event */
         $event = $this->getResource()->getItem();
-        $progress = Assignment::query()
-                ->where('review_method_id', '=', $event->review_method_id)
-                ->count() * 2;
 
-        $progress += (User::query()->count() * 2);
-
-        $value = Answer::query()
-            ->where('event_id', '=', $event->id)
+        $userTotal = Assignment::query()
+            ->where('review_method_id', '=', $event->review_method_id)
             ->count();
-        if ($value >= $progress) {
-            $progress = $value;
+        $userProgress = Answer::query()
+            ->where('event_id', '=', $event->id)
+            ->where('question_id', '=', 1)
+            ->count();
+        if ($userProgress >= $userTotal) {
+            $userTotal = $userProgress;
         }
+        $companyTotal = User::query()->where('company_id', $event->company_id)->count();
+        $companyValue = Answer::query()
+            ->where('event_id', '=', $event->id)
+            ->where('question_id', '=', 3)
+            ->count();
+
+        $full = 0;
+        $part = 0;
+        $nothing = 0;
+        $users = User::all();
+
+        foreach ($users as $user) {
+            $answers = Answer::query()
+                ->where('user_id', '=', $user->id)
+                ->where('question_id', '=', 1)
+                ->count();
+            $assignments = Assignment::query()
+                ->where('from_user_id', '=', $user->id)
+                ->count();
+
+            if ($answers == 0) {
+                $nothing++;
+            } elseif ($answers == $assignments) {
+                $full++;
+            } else {
+                $part++;
+            }
+        }
+
         return [
-            ValueMetric::make('Завершен')
-                ->value($value)
-                ->progress($progress),
+            Content::make([
+                Title::make('Оценка компании'),
+                ValueMetric::make('из ' . $companyTotal . ' ответов')
+                    ->value($companyValue)
+                    ->progress($companyTotal),
+            ]),
+            Content::make([
+                Title::make('Оценка сотрудников'),
+                ValueMetric::make('из ' . $userTotal . ' ответов')
+                    ->value($userProgress)
+                    ->progress($userTotal),
+            ]),
+            Content::make([
+                Title::make(''),
+                DonutChartMetric::make('Проходимость')
+                    ->values(['Полностью' => $full, 'Частично' => $part, 'Не приступали' => $nothing])
+                    ->columnSpan(User::query()->count()),
+            ]),
             ...parent::mainLayer()
         ];
     }

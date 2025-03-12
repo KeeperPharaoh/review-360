@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/one-to-one', [OneToOneController::class, 'generateQuestions']);
 Route::post('/user-meta', [OneToOneController::class, 'createUserMeta']);
+Route::post('/answer', [OneToOneController::class, 'answer']);

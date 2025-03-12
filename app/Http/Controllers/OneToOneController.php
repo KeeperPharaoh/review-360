@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
+use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Report;
 use App\Models\UserMeta;
@@ -58,7 +60,7 @@ class OneToOneController extends Controller
         $result = "";
         /** @var Event $event */
         foreach ($events as $event) {
-            $result .=  $event->report . PHP_EOL;
+            $result .= $event->report . PHP_EOL;
         }
         $response = $this->openAiService->test(
             'На основе последних отчетов о компании можешь стравнить диминку и тендации . Дать в красивом формате,  используй разные теги например </br>'
@@ -89,5 +91,26 @@ class OneToOneController extends Controller
         }
 
         return $cut;
+    }
+
+    public function answer(Request $request)
+    {
+        $data = $request->all();
+        $assigment = Assignment::query()
+            ->find($data['assignment_id']);
+
+
+        //                'answer' => $rating,
+        //                'assignment_id' => $assignmentId,
+        //                'question_id' => $questionId,
+
+        Answer::query()->create([
+            'user_id' => $assigment->from_user_id,
+            'event_id' => 1,
+            'question_id' => $data['question_id'],
+            'assignment_id' => $data['assignment_id'],
+            'answer' => $data['answer'],
+            'target_name' => $assigment->toUser->first_name . ' ' . $assigment->toUser->last_name,
+        ]);
     }
 }

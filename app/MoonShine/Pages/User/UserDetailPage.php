@@ -88,7 +88,7 @@ class UserDetailPage extends DetailPage
             foreach ($answers as $answer) {
                 $total += (int) $answer->answer;
             }
-            $lineChartMetricData[(new \DateTime($event->end_at))->format('Y-m-d')] = number_format($answers->count() ? $total / $answers->count() : 0, 2);
+            $lineChartMetricData[(new \DateTime($event->end_at))->format('Y-m-d')] = number_format($answers->where('answer', '!=', 'Не взаимодействуем')->count() ? $total / $answers->where('answer', '!=', 'Не взаимодействуем')->count() : 0, 2);
         }
 
         return [
