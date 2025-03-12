@@ -60,7 +60,12 @@ class Dashboard extends Page
 
             $total = 0;
             foreach ($answers as $answer) {
+                try {
                 $total += $answer->answer;
+
+                } catch (\Throwable) {
+
+                }
             }
             $lineChartMetricData[(new \DateTime($event->end_at))->format('Y-m-d')] =
                 number_format($answers->count() ? $total / $answers->count() : 0, 2);

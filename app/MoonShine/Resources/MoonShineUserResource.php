@@ -167,9 +167,9 @@ class MoonShineUserResource extends ModelResource
                 'email',
                 Rule::unique('moonshine_users')->ignoreModel($item),
             ],
-            'password' => $item->exists
-                ? 'sometimes|nullable|min:6|required_with:password_repeat|same:password_repeat'
-                : 'required|min:6|required_with:password_repeat|same:password_repeat',
+//            'password' => $item->exists
+//                ? 'sometimes|nullable|min:6|required_with:password_repeat|same:password_repeat'
+//                : 'required|min:6|required_with:password_repeat|same:password_repeat',
         ];
     }
 
