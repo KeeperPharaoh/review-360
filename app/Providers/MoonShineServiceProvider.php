@@ -26,6 +26,7 @@ use App\MoonShine\Resources\AnswerResource;
 use App\MoonShine\Pages\Event\GeneralReportPage;
 use App\MoonShine\Pages\Event\AnswerPage;
 use App\MoonShine\Pages\Event\UserMetaPage;
+use App\MoonShine\Pages\Event\CompanyReportPage;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -58,6 +59,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 GeneralReportPage::class,
                 AnswerPage::class,
                 UserMetaPage::class,
+                CompanyReportPage::class,
             ])
         ;
     }

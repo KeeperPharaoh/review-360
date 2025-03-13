@@ -8,7 +8,6 @@ use App\Models\Answer;
 use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\Report;
-use App\Models\UserMeta;
 use MoonShine\Laravel\Pages\Page;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\UI\Components\Table\TableBuilder;
@@ -58,16 +57,21 @@ class ReportPage extends Page
                     ->where('event_id', '=', $event->id)
                     ->where('question_id', 1)
                     ->whereIn('assignment_id', $assignments)
+                    ->where('answer', '!=', 'Не взаимодействуем')
                     ->select(['answer'])
-                    ->get();
+                    ->get()
+                    ->pluck('answer')
+                    ->toArray();
+
                 $total = 0;
                 foreach ($answers as $answer) {
-                    $total += (int) $answer->answer;
+                    $total += (int)$answer;
                 }
 
                 $result[] = [
                     'fio' => $report->user->first_name . ' ' . $report->user->last_name,
-                    'avg' => number_format($answers->where('answer', '!=', 'Не взаимодействуем')->count() ? $total / $answers->where('answer', '!=', 'Не взаимодействуем')->count() : 0, 2),
+                    'avg' => number_format(count($answers) ? $total / count($answers) : 0, 2),
+                    'median' => number_format($this->median($answers), 2),
                     'report' => $report->text,
                 ];
             }
@@ -78,6 +82,7 @@ class ReportPage extends Page
                     ->fields([
                         Text::make('ФИО', 'fio'),
                         Text::make('Ср. оценка', 'avg'),
+                        Text::make('Медиана', 'median'),
                         Text::make('Отчет', 'report'),
                     ])
             ];
@@ -103,5 +108,29 @@ class ReportPage extends Page
                     ])
             ];
         }
+    }
+
+    protected function median(array $numbers): float
+    {
+        if (empty($numbers)) {
+            return 0;
+        }
+
+        sort($numbers);
+        $count = count($numbers);
+        $middle = floor($count / 2);
+
+        if ($count % 2) {
+            return (float)$numbers[$middle];
+        } else {
+            return (float)($numbers[$middle - 1] + $numbers[$middle]) / 2;
+        }
+    }
+
+    protected function filters(): iterable
+    {
+        return [
+            Text::make('Title', 'title'),
+        ];
     }
 }

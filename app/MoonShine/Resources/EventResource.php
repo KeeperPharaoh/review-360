@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use App\MoonShine\Pages\Event\CompanyReportPage;
 use App\MoonShine\Pages\Event\GeneralReportPage;
 use App\MoonShine\Pages\Event\ReportPage;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,7 @@ class EventResource extends ModelResource
             EventDetailPage::class,
             GeneralReportPage::class,
             ReportPage::class,
+            CompanyReportPage::class,
         ];
     }
 

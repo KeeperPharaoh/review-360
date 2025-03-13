@@ -55,6 +55,7 @@ class EventDetailPage extends DetailPage
         return [
             ActionButton::make('Посмотреть общий отчет', $this->getResource()->getPageUrl(GeneralReportPage::class) . '?event_id=' . $this->getResource()->getItem()->id),
             ActionButton::make('Посмотреть отчет по сотрудникам', $this->getResource()->getPageUrl(ReportPage::class) . '?event_id=' . $this->getResource()->getItem()->id),
+            ActionButton::make('Посмотреть ответы по компании', $this->getResource()->getPageUrl(CompanyReportPage::class) . '?event_id=' . $this->getResource()->getItem()->id),
             ActionButton::make('Посмотреть ответы', env('APP_URL') . '/admin/resource/answer-resource/answer-index-page'),
             ...parent::topLayer()
         ];

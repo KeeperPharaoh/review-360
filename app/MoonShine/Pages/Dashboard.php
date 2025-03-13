@@ -47,7 +47,6 @@ class Dashboard extends Page
             $answers = Answer::query()
                 ->where('event_id', '=', $event->id)
                 ->where('question_id', 3)
-                ->select(['answer'])
                 ->get();
 
             $total = 0;
