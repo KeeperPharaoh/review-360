@@ -42,6 +42,7 @@ class CompanyReportPage extends Page
             ->get();
 
         $result = [];
+        $kek = 1;
         foreach ($answers as $answer) {
             $answerTwo = Answer::query()
                 ->where('event_id', '=', $eventId)
@@ -51,15 +52,18 @@ class CompanyReportPage extends Page
 
 
             $result[] = [
+                'id'  => $kek,
                 'rate' => $answer->answer,
                 'report' => (string)$answerTwo?->answer,
             ];
+            $kek++;
         }
 
         return [
             TableBuilder::make()
                 ->items($result)
                 ->fields([
+                    ID::make('ID', 'id')->sortable(),
                     Text::make('Оценка', 'rate'),
                     Text::make('Отчет', 'report'),
                 ])
