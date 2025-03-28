@@ -59,11 +59,11 @@ class Dashboard extends Page
             Grid::make([
                 ValueMetric::make('Сотрудников')
                     ->value(fn() => 27)
-                    ->columnSpan(6),
+                    ->columnSpan(3),
 
                 ValueMetric::make('Команд')
                     ->value(fn() => 6)
-                    ->columnSpan(6),
+                    ->columnSpan(3),
             ]),
 
             Grid::make([
