@@ -67,13 +67,13 @@ class Dashboard extends Page
             ]),
 
             Grid::make([
-                ValueMetric::make('Мероприятий')
-                    ->value(fn() => Event::count())
-                    ->columnSpan(3),
-
                 ValueMetric::make('Отчетов')
                     ->value(fn() => 52)
                     ->columnSpan(6),
+
+                ValueMetric::make('Мероприятий')
+                    ->value(fn() => Event::count())
+                    ->columnSpan(3),
             ]),
         ];
     }
