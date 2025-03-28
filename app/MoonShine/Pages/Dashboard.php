@@ -47,14 +47,11 @@ class Dashboard extends Page
         $lineChartMetricData['2024-12-16'] = 8.42;
 
         return [
-            Grid::make([
-
                 \MoonShine\UI\Components\Layout\Body::make([
                 LineChartMetric::make('Рейтинг')
                     ->line([
                         'Оценка' => $lineChartMetricData
                     ])->columnSpan(10),
-            ]),
             ]),
             Grid::make([
                 ValueMetric::make('Сотрудников')
