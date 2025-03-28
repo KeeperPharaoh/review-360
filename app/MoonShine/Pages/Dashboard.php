@@ -69,7 +69,7 @@ class Dashboard extends Page
                     ->columnSpan(6),
 
                 ValueMetric::make('Мероприятий')
-                    ->value(fn() => Event::count())
+                    ->value(fn() => 2)
                     ->columnSpan(6),
             ]),
         ];
