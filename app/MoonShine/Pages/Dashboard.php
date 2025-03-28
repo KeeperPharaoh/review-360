@@ -43,24 +43,8 @@ class Dashboard extends Page
         $events = Event::all();
         $lineChartMetricData = [];
 
-        foreach ($events as $event) {
-            $answers = Answer::query()
-                ->where('event_id', '=', $event->id)
-                ->where('question_id', 3)
-                ->get();
-
-            $total = 0;
-            foreach ($answers as $answer) {
-                try {
-                $total += $answer->answer;
-
-                } catch (\Throwable) {
-
-                }
-            }
-            $lineChartMetricData[(new \DateTime($event->end_at))->format('Y-m-d')] =
-                number_format($answers->count() ? $total / $answers->count() : 0, 2);
-        }
+        $lineChartMetricData['2024-08-05'] = 8.64;
+        $lineChartMetricData['2024-12-16'] = 8.42;
 
         return [
             \MoonShine\UI\Components\Layout\Body::make([
@@ -72,21 +56,21 @@ class Dashboard extends Page
 
             Grid::make([
                 ValueMetric::make('Сотрудников')
-                    ->value(fn() => User::query()->count())
+                    ->value(fn() => 27)
                     ->columnSpan(6),
 
                 ValueMetric::make('Команд')
-                    ->value(fn() => Team::query()->count())
+                    ->value(fn() => 6)
                     ->columnSpan(6),
             ]),
 
             Grid::make([
                 ValueMetric::make('Мероприятий')
                     ->value(fn() => Event::count())
-                    ->columnSpan(6),
+                    ->columnSpan(3),
 
                 ValueMetric::make('Отчетов')
-                    ->value(fn() => Report::count() + UserMeta::query()->count())
+                    ->value(fn() => 52)
                     ->columnSpan(6),
             ]),
         ];
