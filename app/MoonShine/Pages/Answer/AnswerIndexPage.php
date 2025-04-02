@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Pages\Answer;
 
-use App\Models\Question;
-use App\MoonShine\Resources\QuestionResource;
-use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
@@ -26,14 +23,8 @@ class AnswerIndexPage extends IndexPage
         return [
             ID::make(),
             Text::make('Кого оценили', 'target_name'),
-
-            BelongsTo::make(
-                'Вопрос',
-                'Question',
-                formatted: static fn(Question $model) => $model->question,
-                resource: QuestionResource::class,
-            ),
-            Text::make('Ответ', 'answer'),
+            Text::make('Оценка', 'answer_1'),
+            Text::make('Ответ', 'answer_2'),
         ];
     }
 

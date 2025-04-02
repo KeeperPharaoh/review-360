@@ -22,7 +22,8 @@ class ReportPage extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            '#' => $this->getTitle()
+            $this->getResource()->getPageUrl(EventDetailPage::class) . '/1' => 'Мероприятие',
+            '#' => $this->getTitle(),
         ];
     }
 

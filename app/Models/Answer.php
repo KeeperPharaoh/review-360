@@ -14,7 +14,7 @@ class Answer extends Model
         'assignment_id',
         'answer',
         'log',
-        'target_name'
+        'target_name',
     ];
 
     public function event(): BelongsTo

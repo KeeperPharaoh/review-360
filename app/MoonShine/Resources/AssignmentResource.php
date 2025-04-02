@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Assignment;
 use App\MoonShine\Pages\Assignment\AssignmentIndexPage;
 use App\MoonShine\Pages\Assignment\AssignmentFormPage;
 use App\MoonShine\Pages\Assignment\AssignmentDetailPage;
 
+use Illuminate\Support\Facades\Auth;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Laravel\Pages\Page;
 

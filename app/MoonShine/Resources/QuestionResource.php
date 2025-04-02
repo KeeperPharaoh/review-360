@@ -10,6 +10,7 @@ use App\Models\Team;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Question;
+use Illuminate\Support\Facades\Auth;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\UI\Components\Layout\Box;
@@ -105,6 +106,10 @@ class QuestionResource extends ModelResource
         return $this->indexFields();
     }
 
+    protected function modifyQueryBuilder(Builder $builder): Builder
+    {
+        return $builder->where('company_id', '=', Auth::user()->company_id);
+    }
     /**
      * @param Question $item
      *

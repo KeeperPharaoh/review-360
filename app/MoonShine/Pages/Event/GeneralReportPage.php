@@ -153,9 +153,6 @@ class GeneralReportPage extends Page
                 DonutChartMetric::make('Оценка компании')
                     ->values(['Промоутеры' => $promoters, 'Нейтралы' => $passives, 'Негативы' => $detractors])
                     ->columnSpan(6),
-//                DonutChartMetric::make('Сотрудники')
-//                    ->values(['Промоутеры' => $promotersEmployee, 'Нейтралы' => $passivesEmployee, 'Негативы' => $detractorsEmployee])
-//                    ->columnSpan(6),
             ]),
 
             Content::make([

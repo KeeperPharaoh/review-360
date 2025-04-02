@@ -7,22 +7,15 @@ namespace App\MoonShine\Pages;
 use App\Models\Answer;
 use App\Models\Event;
 use App\Models\Question;
-use App\Models\Report;
-use App\Models\Team;
-use App\Models\User;
-use App\Models\UserMeta;
+use App\MoonShine\BasePages\Page;
+use DateTime;
 use MoonShine\Apexcharts\Components\LineChartMetric;
-use MoonShine\Laravel\Pages\Page;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Layout\Grid;
-use MoonShine\UI\Components\Metrics\Wrapped\ValueMetric;
+use MoonShine\MenuManager\Attributes\SkipMenu;
+use MoonShine\UI\Components\Layout\Body;
 
-#[\MoonShine\MenuManager\Attributes\SkipMenu]
+#[SkipMenu]
 class Dashboard extends Page
 {
-    /**
-     * @return array<string, string>
-     */
     public function getBreadcrumbs(): array
     {
         return [
@@ -35,42 +28,46 @@ class Dashboard extends Page
         return 'О компании';
     }
 
-    /**
-     * @return list<ComponentContract>
-     */
     protected function components(): iterable
     {
-        $events = Event::all();
+        $events = Event::query()
+            ->where('company_id', $this->getCompany()->getId())
+            ->get();
+
         $lineChartMetricData = [];
 
-        $lineChartMetricData['2024-08-05'] = 8.64;
-        $lineChartMetricData['2024-12-16'] = 8.42;
+        foreach ($events as $event) {
+            $questions = Question::query()
+                ->where('company_id', $this->getCompany()->getId())
+                ->where('target', '=', 'company')
+                ->whereIn('answer_type', ['number_10'])
+                ->get()
+                ->pluck('id');
+
+            $answers = Answer::query()
+                ->where('event_id', '=', $event->id)
+                ->whereIn('question_id', $questions)
+                ->select(['answer'])
+                ->get();
+
+            $total = 0;
+            foreach ($answers as $answer) {
+                try {
+                    $total += $answer->answer;
+                } catch (\Throwable) {
+
+                }
+            }
+            $lineChartMetricData[(new DateTime($event->end_at))->format('Y-m-d')] =
+                number_format($answers->count() ? $total / $answers->count() : 0, 2);
+        }
 
         return [
-                \MoonShine\UI\Components\Layout\Body::make([
+            Body::make([
                 LineChartMetric::make('Рейтинг')
                     ->line([
                         'Оценка' => $lineChartMetricData
                     ])->columnSpan(10),
-            ]),
-            Grid::make([
-                ValueMetric::make('Сотрудников')
-                    ->value(fn() => 27)
-                    ->columnSpan(6),
-
-                ValueMetric::make('Команд')
-                    ->value(fn() => 6)
-                    ->columnSpan(6),
-            ]),
-
-            Grid::make([
-                ValueMetric::make('Отчетов')
-                    ->value(fn() => 52)
-                    ->columnSpan(6),
-
-                ValueMetric::make('Мероприятий')
-                    ->value(fn() => 2)
-                    ->columnSpan(6),
             ]),
         ];
     }

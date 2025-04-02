@@ -7,12 +7,12 @@ namespace App\MoonShine\Resources;
 use App\MoonShine\Pages\Event\CompanyReportPage;
 use App\MoonShine\Pages\Event\GeneralReportPage;
 use App\MoonShine\Pages\Event\ReportPage;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Models\Event;
 use App\MoonShine\Pages\Event\EventIndexPage;
 use App\MoonShine\Pages\Event\EventFormPage;
 use App\MoonShine\Pages\Event\EventDetailPage;
-
+use Illuminate\Support\Facades\Auth;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Laravel\Pages\Page;
 
@@ -38,6 +38,16 @@ class EventResource extends ModelResource
             ReportPage::class,
             CompanyReportPage::class,
         ];
+    }
+
+    protected function modifyQueryBuilder(Builder $builder): Builder
+    {
+        return $builder->where('company_id', '=', Auth::user()->company_id);
+    }
+
+    protected function search(): array
+    {
+        return ['name'];
     }
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Layouts;
 
 use App\Models\MoonshineUser;
+use App\MoonShine\Resources\AnswerResource;
 use Illuminate\Support\Facades\Auth;
 use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\ColorManager\ColorManager;
@@ -34,7 +35,6 @@ use MoonShine\UI\Components\{Breadcrumbs,
     When
 };
 use MoonShine\Laravel\Resources\MoonShineUserResource;
-use MoonShine\Laravel\Resources\MoonShineUserRoleResource;
 use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
 use App\MoonShine\Resources\CompanyResource;
@@ -45,7 +45,6 @@ use App\MoonShine\Resources\ReviewMethodResource;
 use App\MoonShine\Resources\QuestionResource;
 use App\MoonShine\Resources\EventResource;
 use App\MoonShine\Resources\AssignmentResource;
-use App\MoonShine\Resources\AnswerResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -68,11 +67,12 @@ final class MoonShineLayout extends AppLayout
                     static fn() => __('moonshine::ui.resource.admins_title'),
                     MoonShineUserResource::class
                 ),
-        ];
+            ];
         } else {
             return [
                 MenuItem::make('Сотрудники', UserResource::class, 'user-group'),
                 MenuItem::make('Мероприятия', EventResource::class, 'calendar'),
+                MenuItem::make('Ответы', AnswerResource::class, 'question-mark-circle'),
 
                 MenuGroup::make('Настр. Отделов', [
                     MenuItem::make('Отделы', TeamResource::class, 'building-office-2'),
@@ -81,22 +81,15 @@ final class MoonShineLayout extends AppLayout
                 MenuGroup::make('Настр. Оценивания', [
                     MenuItem::make('Методологии', ReviewMethodResource::class, 'queue-list'),
                     MenuItem::make('Вопросы', QuestionResource::class, 'question-mark-circle'),
-                    MenuItem::make('Матрица оценок', AssignmentResource::class, 'cube-transparent'),
+//                    MenuItem::make('Матрица оценок', AssignmentResource::class, 'cube-transparent'),
                 ], 'squares-2x2'),
-//                MenuItem::make('Answers', AnswerResource::class),
-
             ];
         }
     }
 
-    /**
-     * @param ColorManager $colorManager
-     */
     protected function colors(ColorManagerContract $colorManager): void
     {
         parent::colors($colorManager);
-
-        // $colorManager->primary('#00000');
     }
 
     public function build(): Layout

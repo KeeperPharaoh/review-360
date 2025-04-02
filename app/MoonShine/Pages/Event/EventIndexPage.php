@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\MoonShine\Pages\Event;
 
 use App\Models\ReviewMethod;
-use App\Models\Team;
 use App\MoonShine\Resources\ReviewMethodResource;
-use App\MoonShine\Resources\TeamResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
-use MoonShine\Laravel\Pages\Crud\IndexPage;
+use App\MoonShine\BasePages\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\UI\Fields\ID;

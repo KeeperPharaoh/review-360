@@ -190,14 +190,14 @@ class MoonShineUserResource extends ModelResource
                 'moonshineUserRole',
                 formatted: static fn(MoonshineUserRole $model) => $model->name,
                 resource: MoonShineUserRoleResource::class,
-            )->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
+            )->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name']))->nullable(),
 
             BelongsTo::make(
                 'Компания',
                 'company',
                 formatted: static fn(Company $model) => $model->getName(),
                 resource: CompanyResource::class,
-            )->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
+            )->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name']))->nullable(),
         ];
     }
 }

@@ -6,28 +6,20 @@ namespace App\MoonShine\Pages\User;
 
 use App\Models\Position;
 use App\Models\Team;
-use App\MoonShine\Resources\MoonShineUserRoleResource;
+use App\Models\User;
 use App\MoonShine\Resources\PositionResource;
 use App\MoonShine\Resources\TeamResource;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
-use MoonShine\Laravel\Models\MoonshineUserRole;
-use MoonShine\Laravel\Pages\Crud\IndexPage;
+use App\MoonShine\BasePages\IndexPage;
 use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\UI\Components\Layout\Flex;
-use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
 use Throwable;
 
-
 class UserIndexPage extends IndexPage
 {
-    /**
-     * @return list<ComponentContract|FieldContract>
-     */
     protected function fields(): iterable
     {
         return [
@@ -39,7 +31,6 @@ class UserIndexPage extends IndexPage
                 formatted: static fn(Team $model) => $model->getName(),
                 resource: TeamResource::class,
             )
-                ->creatable()
                 ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
 
             BelongsTo::make(
@@ -48,11 +39,10 @@ class UserIndexPage extends IndexPage
                 formatted: static fn(Position $model) => $model->getName(),
                 resource: PositionResource::class,
             )
-                ->creatable()
                 ->valuesQuery(static fn(Builder $q) => $q->select(['id', 'name'])),
 
-            Text::make(__('moonshine::ui.resource.name'), 'first_name'),
-            Text::make('Фамилия', 'last_name'),
+            Text::make('Имя', 'first_name')->setNameIndex('first_name'),
+            Text::make('Фамилия', 'last_name')->sortable(),
             Text::make('Номер телефона', 'phone_number'),
             Text::make('Telegram', 'telegram_username'),
         ];
@@ -89,10 +79,5 @@ class UserIndexPage extends IndexPage
         return [
             ...parent::bottomLayer()
         ];
-    }
-
-    protected function search(): array
-    {
-        return ['id', 'first_name', 'last_name'];
     }
 }
